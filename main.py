@@ -5,6 +5,7 @@ from database import get_db
 from models import Task, User
 from fastapi.security import OAuth2PasswordBearer
 from auth import hash_password, verify_password, create_access_token, verify_token
+from ai import extract_task_from_message
 
 app = FastAPI()
 
@@ -21,6 +22,9 @@ class TaskUpdate(BaseModel):
 class UserInput(BaseModel):
     username: str
     password: str
+
+class AITaskInput(BaseModel):
+    message: str
 
 def get_current_user(token: str = Depends(oauth2_scheme)):
     user_id = verify_token(token)
@@ -99,4 +103,12 @@ def login(user: UserInput, db = Depends(get_db)):
     return access_token
     
 
+@app.post("/tasks/ai")
+def create_task_from_message(task: AITaskInput, db = Depends(get_db), current_user: str = Depends(get_current_user)):
+    task_title = extract_task_from_message(task.message)
+    new_task = Task(title= task_title, done= False)
+    db.add(new_task)
+    db.commit()
+    db.refresh(new_task)
 
+    return new_task
