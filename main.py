@@ -6,6 +6,10 @@ from models import Task, User
 from fastapi.security import OAuth2PasswordBearer
 from auth import hash_password, verify_password, create_access_token, verify_token
 from ai import extract_task_from_message
+from database import engine, Base
+import models
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
