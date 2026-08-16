@@ -75,3 +75,11 @@ DATABASE_URL=postgresql://username:password@localhost:5432/task_manager
 SECRET_KEY=your-secret-key
 GROQ_API_KEY=your-groq-api-key
 ```
+
+## Testing & CI/CD
+
+- Automated tests written with **pytest**
+- **GitHub Actions** CI pipeline runs on every push
+- Tests cover: user registration, login, authentication, and endpoint security
+
+![CI](https://github.com/Ani1070git/task-management-api/actions/workflows/ci.yml/badge.svg)
